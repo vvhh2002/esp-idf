@@ -73,3 +73,7 @@
 [submodule "components/nimble/nimble"]
 	path = components/nimble/nimble
 	url = https://github.com/espressif/esp-nimble.git
+[submodule "components/arduino"]
+	path = components/arduino
+	url = https://github.com/vvhh2002/arduino-esp32
+	branch = idf-release/v3.3
