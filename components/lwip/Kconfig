@@ -16,6 +16,16 @@ menu "LWIP"
             Please make sure you fully understand the impact of this feature before
             enabling it.
 
+    config ETHARP_SUPPORT_VLAN
+        bool "Support receiving and sending ethernet packets with VLAN header"
+        default n
+        help
+            ETHARP_SUPPORT_VLAN==1: support receiving and sending ethernet packets with
+            VLAN header. See the description of LWIP_HOOK_VLAN_CHECK and LWIP_HOOK_VLAN_SET
+            hooks to check/set VLAN headers.
+            If ETHARP_VLAN_CHECK is defined, only VLAN-traffic for this VLAN is accepted.
+            If ETHARP_VLAN_CHECK is not defined, all traffic is accepted.
+
     config LWIP_IRAM_OPTIMIZATION
         bool "Enable LWIP IRAM optimization"
         default n
@@ -231,6 +241,14 @@ menu "LWIP"
             If rate limiting self-assignment requests, wait this long between
             each request.
 
+    config LWIP_IPV6_AUTOCONFIG
+        bool "Enable IPV6 stateless address autoconfiguration"
+        default n
+        help
+            Enabling this option allows the devices to IPV6 stateless address autoconfiguration.
+
+            See RFC 4862.
+
     menuconfig LWIP_NETIF_LOOPBACK
         bool "Support per-interface loopback"
         default y
@@ -310,7 +328,8 @@ menu "LWIP"
         config TCP_SND_BUF_DEFAULT
             int "Default send buffer size"
             default 5744  # 4 * default MSS
-            range 2440 65535
+            range 2440 65535 if !LWIP_WND_SCALE
+            range 2440 1024000 if LWIP_WND_SCALE
             help
                 Set default send buffer size for new TCP sockets.
 
@@ -326,7 +345,8 @@ menu "LWIP"
         config TCP_WND_DEFAULT
             int "Default receive window size"
             default 5744 # 4 * default MSS
-            range 2440 65535
+            range 2440 65535 if !LWIP_WND_SCALE
+            range 2440 1024000 if LWIP_WND_SCALE
             help
                 Set default TCP receive window size for new TCP sockets.
 
